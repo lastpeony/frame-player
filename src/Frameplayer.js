@@ -38,7 +38,7 @@ FramePlayer.prototype.addFrames = function(newFrameUrls) {
 
 
 FramePlayer.prototype.setRate = function(rate){
-  this.rate = fps
+  this.rate = rate
 }
 
 
