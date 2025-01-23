@@ -1,9 +1,4 @@
 import helpers from './helper';
-import backwardIcon from '../images/backward-button.svg';
-import forwardIcon from '../images/forward-button.svg';
-import pauseIcon from '../images/pause-button.svg';
-import playIcon from '../images/play-button.svg';
-import fullscreenIcon from '../images/fullscreen-button.svg';
 import './Frameplayer.css';
 
 var FramePlayer = function(el, options, jsonFile = null) {
@@ -31,6 +26,14 @@ var FramePlayer = function(el, options, jsonFile = null) {
 
   this.setOptions(options);
   this.initializeRequestAnimationFrame();
+};
+
+
+FramePlayer.prototype.addFrames = function(newFrameUrls) {
+
+  this.jsonVideoFile.frames = this.jsonVideoFile.frames.concat(newFrameUrls);
+  this.frameLength = this.jsonVideoFile.frames.length;
+
 };
 
 FramePlayer.prototype.setOptions = function(options) {
@@ -77,7 +80,10 @@ FramePlayer.prototype.render = function(player) {
     delta,
     videoFramesNum = player.jsonVideoFile.frames.length;
 
+    console.log(videoFramesNum)
+
   var processFrame = function() {
+    videoFramesNum = player.jsonVideoFile.frames.length;
     now = Date.now();
     delta = now - then;
 
@@ -89,7 +95,9 @@ FramePlayer.prototype.render = function(player) {
           ? (player.currentFrame -= 1)
           : (player.currentFrame += 1);
 
-        if (player.currentFrame >= videoFramesNum) player.currentFrame = 0;
+        if (player.currentFrame >= videoFramesNum){
+          player.currentFrame = 0; //yunus
+        }
         else if (player.currentFrame < 0)
           player.currentFrame = videoFramesNum - 1;
 
@@ -220,7 +228,7 @@ FramePlayer.prototype.createControlBar = function() {
   var btnBackwards = document.createElement('button');
   btnBackwards.setAttribute('id', 'backwards-' + _self.elem);
   btnBackwards.setAttribute('class', 'fp-btn');
-  btnBackwards.innerHTML = `<img class="icon" src=${backwardIcon} />`;
+  btnBackwards.innerHTML = `<img class="icon" src="/frame-player-images/backward-button.svg"/>`;
   btnBackwards.addEventListener(
     'click',
     function() {
@@ -234,7 +242,7 @@ FramePlayer.prototype.createControlBar = function() {
   var btnPause = document.createElement('button');
   btnPause.setAttribute('id', 'pause-' + _self.elem);
   btnPause.setAttribute('class', 'fp-btn');
-  btnPause.innerHTML = `<img class="icon" src=${pauseIcon} />`;
+  btnPause.innerHTML = `<img class="icon" src="/frame-player-images/pause-button.svg" />`;
   btnPause.addEventListener(
     'click',
     function() {
@@ -248,7 +256,7 @@ FramePlayer.prototype.createControlBar = function() {
   var btnPlay = document.createElement('button');
   btnPlay.setAttribute('id', 'play-' + _self.elem);
   btnPlay.setAttribute('class', 'fp-btn');
-  btnPlay.innerHTML = `<img class="icon" src=${playIcon} />`;
+  btnPlay.innerHTML = `<img class="icon" src="/frame-player-images/play-button.svg" />`;
   btnPlay.addEventListener(
     'click',
     function() {
@@ -267,7 +275,7 @@ FramePlayer.prototype.createControlBar = function() {
   var forwards = document.createElement('button');
   forwards.setAttribute('id', 'forwards-' + _self.elem);
   forwards.setAttribute('class', 'fp-btn');
-  forwards.innerHTML = `<img class="icon" src=${forwardIcon} />`;
+  forwards.innerHTML = `<img class="icon" src="/frame-player-images/forward-button.svg" />`;
   forwards.addEventListener(
     'click',
     function() {
@@ -291,7 +299,7 @@ FramePlayer.prototype.createControlBar = function() {
   var fullScreen = document.createElement('button');
   fullScreen.setAttribute('id', 'fullscreen-' + _self.elem);
   fullScreen.setAttribute('class', 'fp-btn fp-full');
-  fullScreen.innerHTML = `<img class="icon" src=${fullscreenIcon} />`;
+  fullScreen.innerHTML = `<img class="icon" src="/frame-player-images/fullscreen-button.svg" />`;
   fullScreen.addEventListener(
     'click',
     function() {
@@ -333,11 +341,16 @@ FramePlayer.prototype.scrube = function(e) {
   var progress = document.getElementById('progress-filled-' + this.elem);
   var selectLength = e.offsetX / progressBar[0].offsetWidth;
   progress.style.flexBasis = `${selectLength * 100}%`;
+  console.log(parseInt(selectLength * this.frameLength))
   this.gotoFrame(parseInt(selectLength * this.frameLength));
 };
 
 FramePlayer.prototype.play = function() {
   this.getFile(this.jsonVideoSrc, function(player) {
+
+    console.log(player)
+
+
     if (player.paused) {
       player.render(player);
       player.drawFrame(player);
@@ -403,6 +416,8 @@ FramePlayer.prototype.gotoFrame = function(value) {
   if (value !== parseInt(value, 10)) return;
 
   this.currentFrame = this.startFrame = value;
+
+  console.log(this.jsonVideoFile)
 
   if (this.jsonVideoFile === undefined) {
     this.play();
