@@ -92,7 +92,8 @@ FramePlayer.prototype.render = function(player) {
     videoFramesNum = player.jsonVideoFile.frames.length;
     now = Date.now();
     delta = now - then;
-
+    interval = 1000 / player.rate
+    
     if (delta > interval) {
       then = now - (delta % interval);
 
