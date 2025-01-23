@@ -36,6 +36,12 @@ FramePlayer.prototype.addFrames = function(newFrameUrls) {
 
 };
 
+
+FramePlayer.prototype.setRate = function(rate){
+  this.rate = fps
+}
+
+
 FramePlayer.prototype.setOptions = function(options) {
   if ('rate' in options) {
     this.rate = options.rate;
