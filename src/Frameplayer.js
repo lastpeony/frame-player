@@ -36,6 +36,15 @@ FramePlayer.prototype.addFrames = function(newFrameUrls) {
 
 };
 
+FramePlayer.prototype.updateFrames = function(frames) {
+  this.jsonVideoFile.frames = frames
+  this.frameLength = this.jsonVideoFile.frames.length;
+  this.currentFrame = 0
+
+
+};
+
+
 
 FramePlayer.prototype.setRate = function(rate){
   this.rate = rate
@@ -93,7 +102,7 @@ FramePlayer.prototype.render = function(player) {
     now = Date.now();
     delta = now - then;
     interval = 1000 / player.rate
-    
+
     if (delta > interval) {
       then = now - (delta % interval);
 
@@ -103,7 +112,7 @@ FramePlayer.prototype.render = function(player) {
           : (player.currentFrame += 1);
 
         if (player.currentFrame >= videoFramesNum){
-          player.currentFrame = 0; //yunus
+        //  player.currentFrame = 0; //yunus
         }
         else if (player.currentFrame < 0)
           player.currentFrame = videoFramesNum - 1;
