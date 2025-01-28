@@ -39,8 +39,8 @@ FramePlayer.prototype.addFrames = function(newFrameUrls) {
 FramePlayer.prototype.updateFrames = function(frames) {
   this.jsonVideoFile.frames = frames
   this.frameLength = this.jsonVideoFile.frames.length;
-  this.currentFrame = 0
-
+  this.startFrame = this.currentFrame = 0;
+  
 
 };
 
